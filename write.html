@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Write a post | Dr. Shameer P.</title><meta name="robots" content="noindex">
+<meta name="description" content="Skin, hair and laser care articles and clinic updates from Dr. Shameer P., dermatologist in Valanchery.">
+<meta property="og:title" content="Dr. Shameer P. | Dermatologist in Valanchery">
+<meta property="og:description" content="Healthy skin. Confident you. Expert care. Book a consultation on WhatsApp: +91 96058 60257.">
+<meta property="og:type" content="website">
+<meta property="og:image" content="https://dr-bright-appeal-refresh.lovable.app/__l5e/assets-v1/5f11abfb-8fed-47cd-862f-2f787e87848e/doctor-portrait.avif">
+<meta name="theme-color" content="#1f4d44">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/styles.css">
+</head>
+<body>
+<div id="site-header"></div>
+<main>
+<section class="section" style="padding-top:56px"><div class="container">
+  <div class="reveal" style="margin-bottom:32px"><span class="eyebrow">Write a post</span><h1 style="font-size:clamp(2.2rem,5vw,3.6rem);margin-top:12px">New post</h1>
+  <p class="lead" style="margin-top:10px">Write your post here, then press <b>Publish</b>. GitHub opens with your post ready: press the green <b>Commit changes</b> button, and it appears on the website in about one minute.</p>
+  <ol class="steps"><li>Sign in to GitHub once, with the account that owns this website.</li><li>Optional photo: press “Upload a photo”, drop the image, press Commit, then type its name below (for example <b>acne-care.jpg</b>).</li><li>Fill in the post and press Publish.</li></ol></div>
+  <div class="write-grid">
+    <form class="book" id="write-form" style="box-shadow:none">
+      <div class="field"><label for="w-title">Title</label><input id="w-title" required placeholder="How to care for acne-prone skin"></div>
+      <div class="field"><label for="w-cat">Category</label><select id="w-cat"><option>Skin care</option><option>Hair care</option><option>Laser &amp; cosmetology</option><option>Clinic news</option><option>Awareness</option></select></div>
+      <div class="field"><label for="w-ex">Short summary (one or two lines)</label><textarea id="w-ex" rows="2"></textarea></div>
+      <div class="field"><label for="w-cover">Cover photo (optional)</label><input id="w-cover" placeholder="acne-care.jpg  or  https://…"></div>
+      <div class="field"><label for="w-body">Post</label><textarea id="w-body" rows="14" required placeholder="Write here. Leave an empty line between paragraphs.
+
+## A heading
+- A list item
+- Another item"></textarea></div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap">
+        <button class="btn btn-primary" type="submit" style="width:auto">Publish</button>
+        <a class="btn btn-ghost" id="upload-link" target="_blank" rel="noopener">Upload a photo</a>
+        <a class="btn btn-ghost" id="manage-link" target="_blank" rel="noopener">Edit or delete posts</a>
+      </div>
+    </form>
+    <div><div class="eyebrow" style="margin-bottom:12px">Preview</div><div class="preview-box"><article class="article"><h2 id="pv-title" style="font-size:2.2rem">Your title</h2><div class="meta" id="pv-meta"></div><div class="prose" id="pv-body" style="margin-top:18px"></div></article></div></div>
+  </div>
+</div></section>
+</main>
+<div id="site-footer"></div>
+<script src="assets/site.js"></script>
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  const $ = id => document.getElementById(id);
+  const gh = `https://github.com/${SITE.repo}`;
+  $("upload-link").href = `${gh}/upload/${SITE.branch}/assets/posts`;
+  $("manage-link").href = `${gh}/tree/${SITE.branch}/posts`;
+  const slugify = s => s.toLowerCase().normalize("NFKD").replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "").slice(0, 60) || "post";
+  const today = () => new Date().toISOString().slice(0, 10);
+  const coverPath = c => !c ? "" : /^https?:/.test(c) ? c : `assets/posts/${c.replace(/^.*\//, "")}`;
+  const clean = s => s.replace(/[\r\n"]+/g, " ").trim();
+  function build() {
+    const t = $("w-title").value.trim();
+    return `---\ntitle: "${clean(t)}"\ndate: ${today()}\ncategory: ${clean($("w-cat").value)}\nexcerpt: "${clean($("w-ex").value)}"\ncover: ${coverPath($("w-cover").value.trim())}\n---\n\n${$("w-body").value.trim()}\n`;
+  }
+  function preview() {
+    $("pv-title").textContent = $("w-title").value || "Your title";
+    $("pv-meta").textContent = `${$("w-cat").value} · ${fmtDate(today())}`;
+    $("pv-body").innerHTML = markdown($("w-body").value || "Your post will appear here.");
+  }
+  ["w-title", "w-cat", "w-body"].forEach(id => $(id).addEventListener("input", preview));
+  preview();
+  $("write-form").addEventListener("submit", e => {
+    e.preventDefault();
+    const name = `${today()}-${slugify($("w-title").value)}.md`;
+    const url = `${gh}/new/${SITE.branch}/posts?filename=${encodeURIComponent(name)}&value=${encodeURIComponent(build())}&message=${encodeURIComponent("New post: " + $("w-title").value.trim())}`;
+    window.open(url, "_blank", "noopener");
+  });
+});
+</script>
+</body>
+</html>

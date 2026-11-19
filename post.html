@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Post | Dr. Shameer P.</title>
+<meta name="description" content="A post from Dr. Shameer P., dermatologist in Valanchery.">
+<meta property="og:title" content="Dr. Shameer P. | Dermatologist in Valanchery">
+<meta property="og:description" content="Healthy skin. Confident you. Expert care. Book a consultation on WhatsApp: +91 96058 60257.">
+<meta property="og:type" content="website">
+<meta property="og:image" content="https://dr-bright-appeal-refresh.lovable.app/__l5e/assets-v1/5f11abfb-8fed-47cd-862f-2f787e87848e/doctor-portrait.avif">
+<meta name="theme-color" content="#1f4d44">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/styles.css">
+</head>
+<body>
+<div id="site-header"></div>
+<main>
+<section class="section" style="padding-top:56px"><div class="container"><article class="article" id="article"><div class="empty">Loading…</div></article></div></section>
+</main>
+<div id="site-footer"></div>
+<script src="assets/site.js"></script>
+<script>
+document.addEventListener("DOMContentLoaded", async () => {
+  const el = document.getElementById("article");
+  const slug = new URLSearchParams(location.search).get("p");
+  try {
+    if (!slug || !/^[\w.-]+$/.test(slug)) throw 0;
+    const p = await loadPost(slug + ".md");
+    document.title = p.title + " | Dr. Shameer P.";
+    el.innerHTML = `<a href="posts.html" style="color:var(--muted);font-size:.9rem">← All posts</a>
+      <div style="margin-top:22px"><span class="eyebrow">${esc(p.category)}</span></div>
+      <h1 style="font-size:clamp(2.2rem,5vw,3.6rem);margin-top:14px">${esc(p.title)}</h1>
+      <div class="meta">Dr. Shameer P., MBBS, MD (DVL) · ${fmtDate(p.date)} · ${p.minutes} min read</div>
+      ${p.cover ? `<div class="cover"><img src="${esc(p.cover)}" alt=""></div>` : '<div style="height:28px"></div>'}
+      <div class="prose">${markdown(p.body)}</div>
+      <div class="cta" style="margin-top:48px"><div><h2 style="font-size:2rem">Have a question about this?</h2><p>Message Dr. Shameer's clinic on WhatsApp.</p></div>
+      <a class="btn btn-wa" target="_blank" rel="noopener" href="${waLink("Hello Dr. Shameer, I read your post \"" + p.title + "\" and have a question.")}">Ask on WhatsApp</a></div>`;
+  } catch (e) {
+    el.innerHTML = '<div class="empty">This post could not be found. <a href="posts.html" style="color:var(--teal)">See all posts</a></div>';
+  }
+});
+</script>
+</body>
+</html>
